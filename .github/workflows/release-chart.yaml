@@ -23,7 +23,7 @@ jobs:
       env:
         GH_TOKEN: ${{ github.token }}
       run: |
-        gh release view ${{ github.event.inputs.release_version }} --json body | jq -r .bodyy > charts/dummy/RELEASE_NOTES.md     
+        gh release view ${{ github.event.inputs.release_version }} --json body | jq -r .body > charts/dummy/RELEASE_NOTES.md     
     - name: Upload artifact to release
       env:
         GH_TOKEN: ${{ github.token }}
