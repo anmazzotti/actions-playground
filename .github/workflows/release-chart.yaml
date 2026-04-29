@@ -20,6 +20,8 @@ jobs:
       with:
         fetch-depth: 0
     - name: Upload artifact to release
+      env:
+        GH_TOKEN: ${{ github.token }}
       run: |
         mkdir -p _assets
         tar -zcvf _assets/dummychart.tar.gz charts/dummy
