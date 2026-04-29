@@ -23,6 +23,7 @@ jobs:
       env:
         GH_TOKEN: ${{ github.token }}
       run: |
+        curl "https://api.github.com/repos/anmazzotti/actions-playground/releases/tags/${{ github.event.inputs.release_version }}" | jq -r .body > charts/dummy/RELEASE_NOTES.md
         mkdir -p _assets
         tar -zcvf _assets/dummychart.tar.gz charts/dummy
         gh release upload ${{ github.event.inputs.release_version }} _assets/dummychart.tar.gz
