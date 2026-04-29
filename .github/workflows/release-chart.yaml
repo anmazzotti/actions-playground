@@ -12,18 +12,22 @@ permissions:
   contents: write # to upload release artifacts
 
 jobs:
-  release:
+  upload_artifact:
     runs-on: ubuntu-latest
     steps:
     - name: Checkout code
       uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
       with:
         fetch-depth: 0
+    - name: Fetch release notes
+      env:
+        GH_TOKEN: ${{ github.token }}
+      run: |
+        gh release view ${{ github.event.inputs.release_version }} --json body | jq -r .bodyy > charts/dummy/RELEASE_NOTES.md     
     - name: Upload artifact to release
       env:
         GH_TOKEN: ${{ github.token }}
       run: |
-        curl "https://api.github.com/repos/anmazzotti/actions-playground/releases/tags/${{ github.event.inputs.release_version }}" | jq -r .body > charts/dummy/RELEASE_NOTES.md
         mkdir -p _assets
         tar -zcvf _assets/dummychart.tar.gz charts/dummy
         gh release upload ${{ github.event.inputs.release_version }} _assets/dummychart.tar.gz
