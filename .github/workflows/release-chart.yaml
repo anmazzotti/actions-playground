@@ -1,0 +1,26 @@
+name: Upload release artifact
+
+on:
+  workflow_dispatch:
+    inputs:
+      release_version:
+        description: "Chart release version (ex. 'v1.2.3')"
+        required: true
+        default: ""
+
+permissions:
+  contents: write # to upload release artifacts
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+      with:
+        fetch-depth: 0
+    - name: Upload artifact to release
+      run: |
+        mkdir -p _assets
+        tar -zcvf _assets/dummychart.tar.gz charts/dummy
+        gh release upload ${{ github.event.inputs.release_version }} _assets/dummychart.tar.gz
